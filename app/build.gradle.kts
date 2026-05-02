@@ -48,4 +48,7 @@ dependencies {
 
     // Room Dependency
     implementation(libs.androidx.room.runtime)
+
+    // Fragment Dependency
+    implementation(libs.androidx.fragment)
 }
