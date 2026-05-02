@@ -14,6 +14,9 @@ data class BookEntity(
     @ColumnInfo(name = "author_name")
     val authorName: String?,
     val description: String?,
+    val category: String?,
+    @ColumnInfo(name = "total_of_pages")
+    val totalOfPages: Int,
     @ColumnInfo(name = "last_page_read")
     val lastPageRead: Int?,
     @ColumnInfo(name = "is_book_finished", defaultValue = "false")
