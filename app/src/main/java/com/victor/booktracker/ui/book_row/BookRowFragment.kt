@@ -1,4 +1,4 @@
-package com.victor.booktracker.ui
+package com.victor.booktracker.ui.book_row
 
 import androidx.fragment.app.Fragment
 import com.victor.booktracker.R
