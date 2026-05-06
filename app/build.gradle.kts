@@ -52,6 +52,8 @@ dependencies {
 
     // Room Dependency
     implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
 
     // Fragment Dependency
     implementation(libs.androidx.fragment)
