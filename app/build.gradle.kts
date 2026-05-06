@@ -34,6 +34,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -48,4 +52,15 @@ dependencies {
 
     // Room Dependency
     implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+
+    // Fragment Dependency
+    implementation(libs.androidx.fragment)
+
+    // ViewModel Lifecycle
+    implementation(libs.lifecycle.viewmodel)
+
+    // Coroutines
+    implementation(libs.kotlin.coroutines)
 }
