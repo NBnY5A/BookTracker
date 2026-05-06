@@ -1,14 +1,14 @@
 package com.victor.booktracker
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import com.victor.booktracker.databinding.ActivityMainBinding
-import com.victor.booktracker.ui.adapter.BookRowAdapter
+import com.victor.booktracker.ui.book_list_fragment.BookListFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -18,13 +18,18 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        val recyclerView = binding.rvBookRow
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        if (savedInstanceState == null) {
+            supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                replace<BookListFragment>(R.id.fcv_main_activity)
+            }
+        }
     }
 }
