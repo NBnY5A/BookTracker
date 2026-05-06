@@ -1,4 +1,4 @@
-package com.victor.booktracker.ui.adapter
+package com.victor.booktracker.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

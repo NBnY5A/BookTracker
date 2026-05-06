@@ -8,7 +8,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import com.victor.booktracker.databinding.ActivityMainBinding
-import com.victor.booktracker.ui.book_list_fragment.BookListFragment
+import com.victor.booktracker.ui.fragments.book_list_fragment.BookListFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
