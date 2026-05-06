@@ -6,8 +6,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.victor.booktracker.data.entity.BookEntity
 import com.victor.booktracker.databinding.BookRowFragmentBinding
 
-class BookRowAdapter(private val listOfBooks: List<BookEntity>) :
+class BookRowAdapter(
+    private val onBookClicked: (BookEntity) -> Unit
+) :
     RecyclerView.Adapter<BookRowAdapter.BookViewHolder>() {
+
+    private var listOfBooks: List<BookEntity> = emptyList()
+
+    fun submitList(newBooks: List<BookEntity>) {
+        listOfBooks = newBooks
+        notifyDataSetChanged()
+    }
 
     class BookViewHolder(val binding: BookRowFragmentBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -33,7 +42,11 @@ class BookRowAdapter(private val listOfBooks: List<BookEntity>) :
         val book = listOfBooks[position]
         viewHolder.binding.tvTitle.text = book.bookName
         viewHolder.binding.tvYear.text = book.yearOfPublished.toString()
-        viewHolder.binding.tvPages.text = book.totalOfPages.toString()
+        viewHolder.binding.tvPages.text = "${book.totalOfPages} páginas"
+
+        viewHolder.binding.root.setOnClickListener {
+            onBookClicked(book)
+        }
     }
 
     override fun getItemCount(): Int {
