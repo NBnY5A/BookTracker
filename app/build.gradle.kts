@@ -55,4 +55,10 @@ dependencies {
 
     // Fragment Dependency
     implementation(libs.androidx.fragment)
+
+    // ViewModel Lifecycle
+    implementation(libs.lifecycle.viewmodel)
+
+    // Coroutines
+    implementation(libs.kotlin.coroutines)
 }
