@@ -1,4 +1,4 @@
-package com.victor.booktracker.ui.fragments.book_list
+package com.victor.booktracker.ui.fragments.read_books
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,12 +17,11 @@ import com.victor.booktracker.ui.adapters.BookRowAdapter
 import com.victor.booktracker.ui.view_model.BookViewModel
 import kotlinx.coroutines.launch
 
-class BookListFragment : Fragment(R.layout.book_list_fragment) {
+class ReadBooksFragment : Fragment(R.layout.book_list_fragment) {
     private var _binding: BookListFragmentBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var bookRowAdapter: BookRowAdapter
-
     private val viewModel: BookViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -38,39 +37,31 @@ class BookListFragment : Fragment(R.layout.book_list_fragment) {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
-        setupFab()
-        observeBooks()
+        observeFinishedBooks()
+
+        binding.fabAddBook.visibility = View.GONE
     }
 
     private fun setupRecyclerView() {
         bookRowAdapter = BookRowAdapter { bookClicked ->
-            navigateToDetails(bookClicked.bookId)
-        }
-
-        binding.rvBooksList.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvBooksList.adapter = bookRowAdapter
-    }
-
-    private fun setupFab() {
-        binding.fabAddBook.setOnClickListener {
-            val action = BookListFragmentDirections.actionBookListFragmentToAddBookFragment()
+            val action = ReadBooksFragmentDirections.actionReadBooksFragmentToBookDetailsFragment(bookClicked.bookId)
             findNavController().navigate(action)
         }
+
+        binding.rvBooksList.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = bookRowAdapter
+        }
     }
 
-    private fun observeBooks() {
+    private fun observeFinishedBooks() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.books.collect { bookList ->
+                viewModel.finishedBooks.collect { bookList ->
                     bookRowAdapter.submitList(bookList)
                 }
             }
         }
-    }
-
-    private fun navigateToDetails(bookId: Int) {
-        val action = BookListFragmentDirections.actionBookListFragmentToBookDetailsFragment(bookId)
-        findNavController().navigate(action)
     }
 
     override fun onDestroyView() {

@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.android.ksp)
+    alias(libs.plugins.androidx.navigation.safeargs)
 }
 
 android {
@@ -60,6 +61,10 @@ dependencies {
 
     // ViewModel Lifecycle
     implementation(libs.lifecycle.viewmodel)
+
+    // Navigation
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
 
     // Coroutines
     implementation(libs.kotlin.coroutines)
