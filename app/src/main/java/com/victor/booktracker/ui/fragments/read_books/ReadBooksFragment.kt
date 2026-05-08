@@ -43,10 +43,21 @@ class ReadBooksFragment : Fragment(R.layout.book_list_fragment) {
     }
 
     private fun setupRecyclerView() {
-        bookRowAdapter = BookRowAdapter { bookClicked ->
-            val action = ReadBooksFragmentDirections.actionReadBooksFragmentToBookDetailsFragment(bookClicked.bookId)
-            findNavController().navigate(action)
-        }
+        bookRowAdapter = BookRowAdapter(
+            onBookClicked = { book ->
+                val action =
+                    ReadBooksFragmentDirections.actionReadBooksFragmentToBookDetailsFragment(book.bookId)
+                findNavController().navigate(action)
+            },
+            onEditClicked = { book ->
+                val action =
+                    ReadBooksFragmentDirections.actionReadBooksFragmentToBookDetailsFragment(book.bookId)
+                findNavController().navigate(action)
+            },
+            onDeleteClicked = { book ->
+                showDeleteConfirmation(book)
+            }
+        )
 
         binding.rvBooksList.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -54,11 +65,24 @@ class ReadBooksFragment : Fragment(R.layout.book_list_fragment) {
         }
     }
 
+    private fun showDeleteConfirmation(book: com.victor.booktracker.data.entity.BookEntity) {
+        androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("Excluir Livro")
+            .setMessage("Tem certeza que deseja excluir o livro \"${book.bookName}\"?")
+            .setPositiveButton("Excluir") { _, _ ->
+                viewModel.deleteBook(book)
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
     private fun observeFinishedBooks() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.finishedBooks.collect { bookList ->
                     bookRowAdapter.submitList(bookList)
+                    binding.tvEmptyState.visibility =
+                        if (bookList.isEmpty()) View.VISIBLE else View.GONE
                 }
             }
         }

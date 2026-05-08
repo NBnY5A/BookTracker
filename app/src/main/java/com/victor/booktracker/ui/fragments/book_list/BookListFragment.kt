@@ -9,9 +9,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.victor.booktracker.R
+import com.victor.booktracker.data.entity.BookEntity
 import com.victor.booktracker.databinding.BookListFragmentBinding
 import com.victor.booktracker.ui.adapters.BookRowAdapter
 import com.victor.booktracker.ui.view_model.BookViewModel
@@ -43,12 +45,30 @@ class BookListFragment : Fragment(R.layout.book_list_fragment) {
     }
 
     private fun setupRecyclerView() {
-        bookRowAdapter = BookRowAdapter { bookClicked ->
-            navigateToDetails(bookClicked.bookId)
-        }
+        bookRowAdapter = BookRowAdapter(
+            onBookClicked = { book -> navigateToDetails(book.bookId) },
+            onEditClicked = { book -> navigateToEdit(book.bookId) },
+            onDeleteClicked = { book -> showDeleteConfirmation(book) }
+        )
 
         binding.rvBooksList.layoutManager = LinearLayoutManager(requireContext())
         binding.rvBooksList.adapter = bookRowAdapter
+    }
+
+    private fun showDeleteConfirmation(book: BookEntity) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Excluir Livro")
+            .setMessage("Tem certeza que deseja excluir o livro \"${book.bookName}\"?")
+            .setPositiveButton("Excluir") { _, _ ->
+                viewModel.deleteBook(book)
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
+    private fun navigateToEdit(bookId: Int) {
+        val action = BookListFragmentDirections.actionBookListFragmentToAddBookFragment(bookId)
+        findNavController().navigate(action)
     }
 
     private fun setupFab() {
@@ -63,6 +83,7 @@ class BookListFragment : Fragment(R.layout.book_list_fragment) {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.books.collect { bookList ->
                     bookRowAdapter.submitList(bookList)
+                    binding.tvEmptyState.visibility = if (bookList.isEmpty()) View.VISIBLE else View.GONE
                 }
             }
         }
