@@ -13,11 +13,15 @@ class BookViewModel(private val bookRepository: BookRepository) : ViewModel() {
     private val _books = MutableStateFlow<List<BookEntity>>(emptyList())
     val books: StateFlow<List<BookEntity>> = _books.asStateFlow()
 
+    private val _finishedBooks = MutableStateFlow<List<BookEntity>>(emptyList())
+    val finishedBooks: StateFlow<List<BookEntity>> = _finishedBooks.asStateFlow()
+
     private val _selectedBook = MutableStateFlow<BookEntity?>(null)
     val selectedBook: StateFlow<BookEntity?> = _selectedBook.asStateFlow()
 
     init {
         getAllBooks()
+        getFinishedBooks()
     }
 
     private fun getAllBooks() {
@@ -28,9 +32,23 @@ class BookViewModel(private val bookRepository: BookRepository) : ViewModel() {
         }
     }
 
+    private fun getFinishedBooks() {
+        viewModelScope.launch {
+            bookRepository.getFinishedBooks().collect { booksList ->
+                _finishedBooks.value = booksList
+            }
+        }
+    }
+
     fun insertBook(book: BookEntity) {
         viewModelScope.launch {
             bookRepository.insert(book)
+        }
+    }
+
+    fun updateBook(book: BookEntity) {
+        viewModelScope.launch {
+            bookRepository.update(book)
         }
     }
 
@@ -44,6 +62,16 @@ class BookViewModel(private val bookRepository: BookRepository) : ViewModel() {
         viewModelScope.launch {
             _selectedBook.value = bookRepository.getBookById(id)
         }
+    }
+
+    fun updateLastPageRead(book: BookEntity, page: Int) {
+        val updatedBook = book.copy(lastPageRead = page)
+        updateBook(updatedBook)
+    }
+
+    fun finishBook(book: BookEntity) {
+        val updatedBook = book.copy(isBookFinished = true)
+        updateBook(updatedBook)
     }
 
 }
