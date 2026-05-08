@@ -9,7 +9,9 @@ import com.victor.booktracker.data.entity.BookEntity
 import com.victor.booktracker.databinding.BookRowFragmentBinding
 
 class BookRowAdapter(
-    private val onBookClicked: (BookEntity) -> Unit
+    private val onBookClicked: (BookEntity) -> Unit,
+    private val onEditClicked: (BookEntity) -> Unit,
+    private val onDeleteClicked: (BookEntity) -> Unit
 ) : ListAdapter<BookEntity, BookRowAdapter.BookViewHolder>(BookDiffCallback()) {
 
     class BookViewHolder(val binding: BookRowFragmentBinding) :
@@ -39,6 +41,14 @@ class BookRowAdapter(
 
             root.setOnClickListener {
                 onBookClicked(book)
+            }
+
+            ibEdit.setOnClickListener {
+                onEditClicked(book)
+            }
+
+            ibDelete.setOnClickListener {
+                onDeleteClicked(book)
             }
         }
     }
