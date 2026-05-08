@@ -13,5 +13,9 @@ class OfflineBookRepository(private val bookDao: BookDao) : BookRepository {
 
     override fun getAll(): Flow<List<BookEntity>> = bookDao.getAllBooks()
 
+    override fun getFinishedBooks(): Flow<List<BookEntity>> = bookDao.getFinishedBooks()
+
+    override fun getUnfinishedBooks(): Flow<List<BookEntity>> = bookDao.getUnfinishedBooks()
+
     override suspend fun getBookById(id: Int): BookEntity? = bookDao.getBookById(id)
 }

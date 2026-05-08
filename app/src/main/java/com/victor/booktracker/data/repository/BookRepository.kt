@@ -12,5 +12,9 @@ interface BookRepository {
 
     fun getAll(): Flow<List<BookEntity>>
 
+    fun getFinishedBooks(): Flow<List<BookEntity>>
+
+    fun getUnfinishedBooks(): Flow<List<BookEntity>>
+
     suspend fun getBookById(id: Int): BookEntity?
 }
