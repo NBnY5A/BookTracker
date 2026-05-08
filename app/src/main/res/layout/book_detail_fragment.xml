@@ -65,6 +65,15 @@
             android:text="Pages" />
     </LinearLayout>
 
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/pb_reading_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/ll_info"
+        app:trackThickness="8dp"
+        app:trackCornerRadius="4dp" />
+
     <ScrollView
         android:id="@+id/sv_book_description"
         android:layout_width="0dp"
@@ -74,7 +83,7 @@
         app:layout_constraintBottom_toTopOf="@id/ll_progress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ll_info">
+        app:layout_constraintTop_toBottomOf="@id/pb_reading_progress">
 
         <TextView
             android:id="@+id/tv_book_description"

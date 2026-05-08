@@ -53,6 +53,13 @@ class BookDetailsFragment : Fragment(R.layout.book_detail_fragment) {
                         binding.tvBookDescription.text = it.description ?: "Sem descrição"
                         binding.etLastPage.setText((it.lastPageRead ?: 0).toString())
                         
+                        val progress = if (it.totalOfPages > 0) {
+                            ((it.lastPageRead ?: 0) * 100) / it.totalOfPages
+                        } else {
+                            0
+                        }
+                        binding.pbReadingProgress.setProgress(progress, true)
+
                         binding.btFinish.isEnabled = !it.isBookFinished
                         if (it.isBookFinished) {
                             binding.btFinish.text = "Concluído"
