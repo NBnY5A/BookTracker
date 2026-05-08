@@ -23,6 +23,12 @@ interface BookDao {
     @Query("SELECT * FROM books")
     fun getAllBooks(): Flow<List<BookEntity>>
 
+    @Query("SELECT * FROM books WHERE is_book_finished = 1")
+    fun getFinishedBooks(): Flow<List<BookEntity>>
+
+    @Query("SELECT * FROM books WHERE is_book_finished = 0")
+    fun getUnfinishedBooks(): Flow<List<BookEntity>>
+
     @Query("SELECT * FROM books WHERE book_id = :id")
     suspend fun getBookById(id: Int): BookEntity?
 }
