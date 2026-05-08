@@ -10,7 +10,7 @@
         android:layout_width="60dp"
         android:layout_height="80dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher_foreground"
+        android:src="@drawable/ic_baseline_book_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -66,18 +66,22 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:contentDescription="Editar"
-        android:src="@drawable/ic_launcher_foreground"
+        android:src="@drawable/ic_edit_24"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="centerInside"
         app:layout_constraintBottom_toTopOf="@+id/ib_delete"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintVertical_chainStyle="packed"/>
 
     <ImageButton
         android:id="@+id/ib_delete"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:contentDescription="Excluir"
-        android:src="@drawable/ic_launcher_foreground"
+        android:src="@drawable/ic_delete_24"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ib_edit" />
