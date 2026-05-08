@@ -6,21 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.commit
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.victor.booktracker.R
 import com.victor.booktracker.databinding.BookListFragmentBinding
 import com.victor.booktracker.ui.adapters.BookRowAdapter
-import com.victor.booktracker.ui.fragments.add_book.AddBookFragment
-import com.victor.booktracker.ui.fragments.book_details.BookDetailsFragment
 import com.victor.booktracker.ui.view_model.BookViewModel
 import kotlinx.coroutines.launch
 
 class BookListFragment : Fragment(R.layout.book_list_fragment) {
-    private lateinit var bookListFragmentBinding: BookListFragmentBinding
+    private var _binding: BookListFragmentBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var bookRowAdapter: BookRowAdapter
 
@@ -31,35 +30,31 @@ class BookListFragment : Fragment(R.layout.book_list_fragment) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        bookListFragmentBinding = BookListFragmentBinding.inflate(inflater, container, false)
-        return bookListFragmentBinding.root
+        _binding = BookListFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupRecycleView()
+        setupRecyclerView()
         setupFab()
         observeBooks()
     }
 
-    private fun setupRecycleView() {
+    private fun setupRecyclerView() {
         bookRowAdapter = BookRowAdapter { bookClicked ->
             navigateToDetails(bookClicked.bookId)
         }
 
-        bookListFragmentBinding.rvBooksList.layoutManager = LinearLayoutManager(requireContext())
-
-        bookListFragmentBinding.rvBooksList.adapter = bookRowAdapter
+        binding.rvBooksList.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvBooksList.adapter = bookRowAdapter
     }
 
     private fun setupFab() {
-        bookListFragmentBinding.fabAddBook.setOnClickListener {
-            requireActivity().supportFragmentManager.commit {
-                setReorderingAllowed(true)
-                replace(R.id.fcv_main_activity, AddBookFragment())
-                addToBackStack("AddBook")
-            }
+        binding.fabAddBook.setOnClickListener {
+            val action = BookListFragmentDirections.actionBookListFragmentToAddBookFragment()
+            findNavController().navigate(action)
         }
     }
 
@@ -74,10 +69,12 @@ class BookListFragment : Fragment(R.layout.book_list_fragment) {
     }
 
     private fun navigateToDetails(bookId: Int) {
-        parentFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace(R.id.fcv_main_activity, BookDetailsFragment.newInstance(bookId))
-            addToBackStack("BookDetails")
-        }
+        val action = BookListFragmentDirections.actionBookListFragmentToBookDetailsFragment(bookId)
+        findNavController().navigate(action)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
